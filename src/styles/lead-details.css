@@ -1,0 +1,72 @@
+.lead-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.lead-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge.high {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.medium {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.lead-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.lead-info-item {
+  background: var(--card);
+  padding: 14px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.lead-info-item label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+/* COMMENTS (SUPER FEATURE) */
+
+.comments-section {
+  margin-top: 30px;
+}
+
+.comment {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-time {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.comment-input {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}

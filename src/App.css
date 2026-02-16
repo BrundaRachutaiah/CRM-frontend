@@ -1,0 +1,12 @@
+.card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.stat-card {
+  border: 1px solid #aaa;
+  padding: 15px;
+  margin: 10px 0;
+  background: #f9f9f9;
+}

@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+button {
+  margin-left: 5px;
+}
+
+input, select {
+  margin-right: 5px;
+}

@@ -1,0 +1,21 @@
+.sidebar {
+  width: 220px;
+  background: white;
+  min-height: 100vh;
+  padding: 20px;
+  border-right: 1px solid var(--border);
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 6px;
+}
+
+.sidebar a.active {
+  background: var(--primary);
+  color: white;
+}

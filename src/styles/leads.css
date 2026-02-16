@@ -1,0 +1,45 @@
+.leads-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.leads-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.leads-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.lead-row {
+  background: var(--card);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lead-info h4 {
+  margin: 0 0 6px;
+}
+
+.lead-meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.lead-actions a {
+  text-decoration: none;
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 500;
+}
