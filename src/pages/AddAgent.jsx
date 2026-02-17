@@ -23,9 +23,11 @@ export default function AddAgent() {
     setSaving(true);
     try {
       await API.post('/agents', { name, email });
+      window.alert('Sales agent created successfully.');
       navigate('/agents');
     } catch (submitError) {
       setError(submitError.response?.data?.error || 'Failed to create sales agent.');
+      window.alert('Failed to create sales agent.');
     } finally {
       setSaving(false);
     }

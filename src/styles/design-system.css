@@ -17,14 +17,15 @@ body {
 }
 
 h2 {
-  margin-bottom: 16px;
+  margin: 0 0 20px;
 }
 
 button {
-  padding: 8px 14px;
+  padding: 10px 14px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  font: inherit;
 }
 
 .btn-primary {
@@ -38,8 +39,14 @@ button {
   color: var(--text);
 }
 
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
 input, select {
-  padding: 8px;
+  padding: 10px;
   border-radius: 6px;
   border: 1px solid var(--border);
+  font: inherit;
 }

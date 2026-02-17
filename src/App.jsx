@@ -5,6 +5,7 @@ import LeadDetails from './pages/LeadDetails';
 import Agents from './pages/Agents';
 import Reports from './pages/Reports';
 import AddLead from './pages/AddLead';
+import EditLead from './pages/EditLead';
 import AddAgent from './pages/AddAgent';
 import LeadsByStatus from './pages/LeadsByStatus';
 import LeadsByAgent from './pages/LeadsByAgent';
@@ -18,6 +19,7 @@ function App() {
         <Route path="/leads" element={<Leads />} />
         <Route path="/leads/new" element={<AddLead />} />
         <Route path="/leads/:id" element={<LeadDetails />} />
+        <Route path="/leads/:id/edit" element={<EditLead />} />
         <Route path="/agents" element={<Agents />} />
         <Route path="/agents/new" element={<AddAgent />} />
         <Route path="/reports" element={<Reports />} />

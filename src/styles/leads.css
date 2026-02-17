@@ -2,18 +2,48 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .leads-toolbar {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filters select,
+.filters input {
+  min-width: 190px;
+}
+
+.filters button {
+  min-height: 42px;
+}
+
+.leads-toolbar input,
+.leads-toolbar select {
+  min-width: 180px;
 }
 
 .leads-list {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 16px;
 }
 
 .lead-row {
@@ -25,7 +55,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  gap: 14px;
 }
 
 .lead-info h4 {
@@ -37,9 +67,50 @@
   color: var(--muted);
 }
 
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+}
+
 .lead-actions a {
   text-decoration: none;
   font-size: 14px;
   color: var(--primary);
   font-weight: 500;
+}
+
+.lead-row-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.lead-actions {
+  margin-left: 0;
+}
+
+@media (max-width: 900px) {
+  .lead-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .lead-actions {
+    margin-left: 0;
+  }
+
+  .lead-row-right {
+    margin-left: 0;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filters select,
+  .filters input,
+  .filters button {
+    width: 100%;
+  }
 }

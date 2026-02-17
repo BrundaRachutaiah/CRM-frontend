@@ -10,14 +10,24 @@ export default function Leads() {
   const [leads, setLeads] = useState([]);
   const navigate = useNavigate();
 
-  const fetchLeads = async (filters = {}) => {
+  const fetchLeads = async (filters = {}, notify = false) => {
     const query = new URLSearchParams(filters).toString();
-    const res = await API.get(`/leads?${query}`);
-    setLeads(res.data.data);
+    try {
+      const res = await API.get(`/leads?${query}`);
+      setLeads(res.data.data);
+      if (notify) {
+        window.alert(`Filter applied. ${res.data.data.length} lead(s) found.`);
+      }
+    } catch {
+      setLeads([]);
+      window.alert('Failed to fetch leads.');
+    }
   };
 
   useEffect(() => {
-    fetchLeads();
+    API.get('/leads')
+      .then(res => setLeads(res.data.data))
+      .catch(() => setLeads([]));
   }, []);
 
   return (
@@ -30,7 +40,7 @@ export default function Leads() {
       </div>
 
       <div className="leads-toolbar">
-        <Filters onApply={fetchLeads} />
+        <Filters onApply={(filters) => fetchLeads(filters, true)} />
       </div>
 
       <LeadList leads={leads} />

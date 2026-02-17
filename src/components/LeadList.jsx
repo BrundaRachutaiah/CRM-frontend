@@ -15,12 +15,14 @@ export default function LeadList({ leads }) {
             </div>
           </div>
 
-          <span className={`badge ${lead.status.toLowerCase()}`}>
-            {lead.status}
-          </span>
+          <div className="lead-row-right">
+            <span className={`badge ${lead.status.toLowerCase()}`}>
+              {lead.status}
+            </span>
 
-          <div className="lead-actions">
-            <Link to={`/leads/${lead._id}`}>View</Link>
+            <div className="lead-actions">
+              <Link to={`/leads/${lead._id}`}>View</Link>
+            </div>
           </div>
         </div>
       ))}

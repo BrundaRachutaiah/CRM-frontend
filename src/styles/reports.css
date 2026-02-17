@@ -5,26 +5,39 @@
   align-items: stretch;
 }
 
-.report-card h3 {
-  margin-bottom: 8px;
-}
-
 .report-subtitle {
   font-size: 14px;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin: 0 0 8px;
 }
 
-.chart-wrap {
-  height: 240px;
+.report-metric {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.report-list {
+  display: grid;
+  gap: 10px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.report-row-stack {
+  display: grid;
+  justify-content: flex-start;
+  gap: 4px;
 }
 
 @media (max-width: 900px) {
   .reports-grid {
     grid-template-columns: 1fr;
-  }
-
-  .chart-wrap {
-    height: 220px;
   }
 }

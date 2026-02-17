@@ -1,22 +1,22 @@
 import { useEffect, useState } from 'react';
 import DashboardLayout from '../layout/DashboardLayout';
 import Card from '../components/Card';
-import PipelinePieChart from '../components/PipelinePieChart';
-import ClosedByAgentBarChart from '../components/ClosedByAgentBarChart';
+import LeadList from '../components/LeadList';
 import API from '../api/api';
 import '../styles/dashboard.css';
-import '../styles/reports.css';
+import '../styles/leads.css';
 
 export default function Dashboard() {
   const [totalLeads, setTotalLeads] = useState(0);
   const [pipeline, setPipeline] = useState(0);
   const [closed, setClosed] = useState(0);
-  const [closedByAgent, setClosedByAgent] = useState([]);
+  const [leads, setLeads] = useState([]);
 
   useEffect(() => {
     // TOTAL LEADS
     API.get('/leads')
       .then(res => {
+        setLeads(res.data.data);
         setTotalLeads(res.data.data.length);
       })
       .catch(err => console.error(err));
@@ -35,12 +35,6 @@ export default function Dashboard() {
       })
       .catch(err => console.error(err));
 
-    // CLOSED BY AGENT
-    API.get('/report/closed-by-agent')
-      .then(res => {
-        setClosedByAgent(res.data.data);
-      })
-      .catch(err => console.error(err));
   }, []);
 
   return (
@@ -53,18 +47,13 @@ export default function Dashboard() {
         <Card title="Closed">{closed}</Card>
       </div>
 
-      <div className="reports-grid">
-        <Card title="Pipeline Overview">
-          <PipelinePieChart
-            pipelineCount={pipeline}
-            closedCount={closed}
-          />
-        </Card>
-
-        <Card title="Closed by Agent">
-          <ClosedByAgentBarChart data={closedByAgent} />
-        </Card>
-      </div>
+      <Card title="Leads">
+        {leads.length > 0 ? (
+          <LeadList leads={leads} />
+        ) : (
+          <p className="empty-state">No leads available.</p>
+        )}
+      </Card>
     </DashboardLayout>
   );
 }

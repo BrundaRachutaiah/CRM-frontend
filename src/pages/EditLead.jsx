@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import API from '../api/api';
 import '../styles/forms.css';
@@ -10,36 +10,38 @@ const initialForm = {
   salesAgent: '',
   status: 'New',
   priority: 'Medium',
-  timeToClose: 30,
-  tags: []
+  timeToClose: 30
 };
 
-export default function AddLead() {
+export default function EditLead() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
   const [agents, setAgents] = useState([]);
-  const [tags, setTags] = useState([]);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([API.get('/agents'), API.get('/tags')])
-      .then(([agentsRes, tagsRes]) => {
+    Promise.all([API.get('/agents'), API.get(`/leads/${id}`)])
+      .then(([agentsRes, leadRes]) => {
+        const lead = leadRes.data.data;
         setAgents(agentsRes.data);
-        setTags(tagsRes.data.data || []);
+        setForm({
+          name: lead.name || '',
+          source: lead.source || 'Website',
+          salesAgent: lead.salesAgent?._id || '',
+          status: lead.status || 'New',
+          priority: lead.priority || 'Medium',
+          timeToClose: lead.timeToClose || 30
+        });
       })
-      .catch(() => {
-        setError('Failed to load required form data.');
-      });
-  }, []);
+      .catch(() => setError('Failed to load lead details.'))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const onChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
-  };
-
-  const onTagChange = (event) => {
-    const selected = Array.from(event.target.selectedOptions).map(option => option.value);
-    onChange('tags', selected);
   };
 
   const onSubmit = async (event) => {
@@ -53,25 +55,32 @@ export default function AddLead() {
 
     setSaving(true);
     try {
-      await API.post('/leads', {
+      await API.patch(`/leads/${id}`, {
         ...form,
-        timeToClose: Number(form.timeToClose),
-        tags: form.tags
+        timeToClose: Number(form.timeToClose)
       });
-      window.alert('Lead created successfully.');
-      navigate('/leads');
+      window.alert('Lead updated successfully.');
+      navigate(`/leads/${id}`);
     } catch (submitError) {
-      setError(submitError.response?.data?.message || 'Failed to create lead.');
-      window.alert('Failed to create lead.');
+      setError(submitError.response?.data?.message || 'Failed to update lead.');
+      window.alert('Failed to update lead.');
     } finally {
       setSaving(false);
     }
   };
 
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <p>Loading lead...</p>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <div className="form-shell">
-        <h2>Add New Lead</h2>
+        <h2>Edit Lead</h2>
         <form className="form-grid" onSubmit={onSubmit}>
           <label>
             Lead Name
@@ -150,29 +159,18 @@ export default function AddLead() {
             />
           </label>
 
-          <label className="full-width">
-            Tags
-            <select multiple value={form.tags} onChange={onTagChange}>
-              {tags.map(tag => (
-                <option key={tag._id} value={tag.name}>
-                  {tag.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
           {error && <p className="form-error">{error}</p>}
 
           <div className="form-actions full-width">
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate('/leads')}
+              onClick={() => navigate(`/leads/${id}`)}
             >
               Cancel
             </button>
             <button type="submit" className="btn-primary" disabled={saving}>
-              {saving ? 'Creating...' : 'Create Lead'}
+              {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>

@@ -2,29 +2,31 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import Card from '../components/Card';
-import PipelinePieChart from '../components/PipelinePieChart';
-import ClosedByAgentBarChart from '../components/ClosedByAgentBarChart';
 import API from '../api/api';
 import '../styles/reports.css';
 
 export default function Reports() {
   const navigate = useNavigate();
   const [pipelineCount, setPipelineCount] = useState(0);
-  const [closedCount, setClosedCount] = useState(0);
+  const [closedLastWeek, setClosedLastWeek] = useState([]);
   const [closedByAgent, setClosedByAgent] = useState([]);
 
   useEffect(() => {
-    API.get('/report/pipeline').then(res => {
-      setPipelineCount(res.data.totalLeadsInPipeline);
-    });
-
-    API.get('/report/last-week').then(res => {
-      setClosedCount(res.data.length);
-    });
-
-    API.get('/report/closed-by-agent').then(res => {
-      setClosedByAgent(res.data.data);
-    });
+    Promise.all([
+      API.get('/report/pipeline'),
+      API.get('/report/last-week'),
+      API.get('/report/closed-by-agent')
+    ])
+      .then(([pipelineRes, lastWeekRes, byAgentRes]) => {
+        setPipelineCount(pipelineRes.data.totalLeadsInPipeline);
+        setClosedLastWeek(lastWeekRes.data);
+        setClosedByAgent(byAgentRes.data.data);
+      })
+      .catch(() => {
+        setPipelineCount(0);
+        setClosedLastWeek([]);
+        setClosedByAgent([]);
+      });
   }, []);
 
   return (
@@ -42,28 +44,44 @@ export default function Reports() {
       </div>
 
       <div className="reports-grid">
-        {/* PIPELINE REPORT */}
-        <Card>
-          <div className="report-card">
-            <h3>Pipeline Overview</h3>
-            <div className="report-subtitle">
-              Leads in pipeline vs closed
-            </div>
-            <PipelinePieChart
-              pipelineCount={pipelineCount}
-              closedCount={closedCount}
-            />
+        <Card title="Pipeline Report">
+          <p className="report-subtitle">Total leads currently in pipeline</p>
+          <div className="report-metric">{pipelineCount}</div>
+        </Card>
+
+        <Card title="Closed Last 7 Days">
+          <p className="report-subtitle">Leads closed within the past week</p>
+          <div className="report-metric">{closedLastWeek.length}</div>
+        </Card>
+
+        <Card title="Closed Leads by Agent">
+          <p className="report-subtitle">Closed lead count grouped by sales agent</p>
+          <div className="report-list">
+            {closedByAgent.length === 0 && (
+              <p className="empty-state">No closed leads found.</p>
+            )}
+            {closedByAgent.map(row => (
+              <div key={row.salesAgent} className="report-row">
+                <span>{row.salesAgent}</span>
+                <strong>{row.closedLeads}</strong>
+              </div>
+            ))}
           </div>
         </Card>
 
-        {/* CLOSED BY AGENT */}
-        <Card>
-          <div className="report-card">
-            <h3>Closed Leads by Sales Agent</h3>
-            <div className="report-subtitle">
-              Performance comparison across agents
-            </div>
-            <ClosedByAgentBarChart data={closedByAgent} />
+        <Card title="Recently Closed Leads">
+          <p className="report-subtitle">Lead, owner and closure date</p>
+          <div className="report-list">
+            {closedLastWeek.length === 0 && (
+              <p className="empty-state">No recently closed leads found.</p>
+            )}
+            {closedLastWeek.map(lead => (
+              <div key={lead.id} className="report-row report-row-stack">
+                <strong>{lead.name}</strong>
+                <span>{lead.salesAgent}</span>
+                <span>{new Date(lead.closedAt).toLocaleDateString()}</span>
+              </div>
+            ))}
           </div>
         </Card>
       </div>

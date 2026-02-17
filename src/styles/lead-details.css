@@ -1,8 +1,17 @@
 .lead-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.lead-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .lead-badges {
@@ -18,6 +27,11 @@
 .badge.medium {
   background: #e0e7ff;
   color: #3730a3;
+}
+
+.badge.low {
+  background: #e0f2fe;
+  color: #075985;
 }
 
 .lead-info-grid {
@@ -48,11 +62,15 @@
   margin-top: 30px;
 }
 
+.comment-section-wrap {
+  display: grid;
+  gap: 12px;
+}
+
 .comment {
   background: #f3f4f6;
   padding: 12px;
   border-radius: 6px;
-  margin-bottom: 10px;
 }
 
 .comment-author {
@@ -68,5 +86,26 @@
 .comment-input {
   display: flex;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-input input {
+  min-width: 260px;
+  flex: 1;
+}
+
+.comment-input select {
+  min-width: 180px;
+}
+
+.comment-list {
+  display: grid;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .lead-info-grid {
+    grid-template-columns: 1fr;
+  }
 }

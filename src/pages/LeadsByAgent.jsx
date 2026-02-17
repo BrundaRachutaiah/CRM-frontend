@@ -52,7 +52,7 @@ export default function LeadsByAgent() {
         >
           <option value="">All Agents</option>
           {agents.map(agent => (
-            <option key={agent.id} value={agent.name}>
+            <option key={agent.id} value={agent.id}>
               {agent.name}
             </option>
           ))}

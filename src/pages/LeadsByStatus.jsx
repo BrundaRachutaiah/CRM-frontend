@@ -5,7 +5,7 @@ import '../styles/leads.css';
 
 export default function LeadsByStatus() {
   const [leads, setLeads] = useState([]);
-  const [status, setStatus] = useState('New');
+  const [status, setStatus] = useState('');
   const [agent, setAgent] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
 

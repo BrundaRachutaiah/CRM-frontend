@@ -13,9 +13,10 @@ export const getCommentsByLead = async (leadId) => {
  * POST /leads/:id/comments
  * Add a new comment to a lead
  */
-export const addCommentToLead = async (leadId, commentText) => {
+export const addCommentToLead = async (leadId, commentText, author) => {
   const res = await API.post(`/leads/${leadId}/comments`, {
-    commentText
+    commentText,
+    author
   });
   return res.data;
 };

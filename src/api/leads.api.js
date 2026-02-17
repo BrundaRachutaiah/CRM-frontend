@@ -20,3 +20,8 @@ export const updateLead = async (id, data) => {
   const res = await API.patch(`/leads/${id}`, data);
   return res.data.data;
 };
+
+export const deleteLead = async (id) => {
+  const res = await API.delete(`/leads/${id}`);
+  return res.data;
+};
