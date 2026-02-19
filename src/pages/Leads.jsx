@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import LeadList from '../components/LeadList';
@@ -7,6 +8,7 @@ import API from '../api/api';
 import '../styles/leads.css';
 
 export default function Leads() {
+  const alert = useAlert();
   const [leads, setLeads] = useState([]);
   const navigate = useNavigate();
 
@@ -16,11 +18,11 @@ export default function Leads() {
       const res = await API.get(`/leads?${query}`);
       setLeads(res.data.data);
       if (notify) {
-        window.alert(`Filter applied. ${res.data.data.length} lead(s) found.`);
+        alert.info(`Filter applied. ${res.data.data.length} lead(s) found.`);
       }
     } catch {
       setLeads([]);
-      window.alert('Failed to fetch leads.');
+      alert.error('Failed to fetch leads.');
     }
   };
 

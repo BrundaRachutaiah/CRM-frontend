@@ -4,10 +4,17 @@ import API from '../api/api';
 import '../styles/leads.css';
 
 export default function LeadsByStatus() {
+  const [agents, setAgents] = useState([]);
   const [leads, setLeads] = useState([]);
   const [status, setStatus] = useState('');
   const [agent, setAgent] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+
+  useEffect(() => {
+    API.get('/agents')
+      .then(res => setAgents(res.data))
+      .catch(() => setAgents([]));
+  }, []);
 
   useEffect(() => {
     const filters = new URLSearchParams({
@@ -43,11 +50,14 @@ export default function LeadsByStatus() {
           <option value="Closed">Closed</option>
         </select>
 
-        <input
-          placeholder="Sales Agent Name"
-          value={agent}
-          onChange={event => setAgent(event.target.value)}
-        />
+        <select value={agent} onChange={event => setAgent(event.target.value)}>
+          <option value="">All Agents</option>
+          {agents.map(item => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
 
         <select value={sortOrder} onChange={event => setSortOrder(event.target.value)}>
           <option value="asc">Sort: Time to Close (Low to High)</option>

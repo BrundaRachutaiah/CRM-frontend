@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import API from '../api/api';
 
 export default function CommentSection({ leadId }) {
+  const alert = useAlert();
   const [comments, setComments] = useState([]);
   const [text, setText] = useState('');
   const [agents, setAgents] = useState([]);
@@ -32,7 +34,7 @@ export default function CommentSection({ leadId }) {
   const addComment = async () => {
     if (!text.trim()) return;
     if (!author) {
-      window.alert('Please select an author.');
+      alert.error('Please select an author.');
       return;
     }
 
@@ -44,10 +46,10 @@ export default function CommentSection({ leadId }) {
       });
       setText('');
       await loadComments();
-      window.alert('Comment submitted successfully.');
+      alert.success('Comment submitted successfully.');
     } catch (error) {
       console.error('Failed to add comment', error);
-      window.alert('Failed to submit comment.');
+      alert.error('Failed to submit comment.');
     } finally {
       setLoading(false);
     }
@@ -89,13 +91,18 @@ export default function CommentSection({ leadId }) {
       </div>
 
       <div className="comment-list">
+        {comments.length === 0 && (
+          <p className="comment-empty">No comments yet.</p>
+        )}
         {comments.map(c => (
           <div key={c.id} className="comment">
-            <div className="comment-author">{c.author}</div>
-            <div className="comment-time">
-              {new Date(c.createdAt).toLocaleString()}
+            <div className="comment-meta">
+              <div className="comment-author">{c.author}</div>
+              <div className="comment-time">
+                {new Date(c.createdAt).toLocaleString()}
+              </div>
             </div>
-            <div>{c.commentText}</div>
+            <div className="comment-text">{c.commentText}</div>
           </div>
         ))}
       </div>

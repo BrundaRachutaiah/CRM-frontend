@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import API from '../api/api';
 import '../styles/forms.css';
 
 export default function AddAgent() {
+  const alert = useAlert();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -23,11 +25,11 @@ export default function AddAgent() {
     setSaving(true);
     try {
       await API.post('/agents', { name, email });
-      window.alert('Sales agent created successfully.');
+      alert.success('Sales agent created successfully.');
       navigate('/agents');
     } catch (submitError) {
       setError(submitError.response?.data?.error || 'Failed to create sales agent.');
-      window.alert('Failed to create sales agent.');
+      alert.error('Failed to create sales agent.');
     } finally {
       setSaving(false);
     }

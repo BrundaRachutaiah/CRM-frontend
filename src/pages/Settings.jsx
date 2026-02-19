@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import DashboardLayout from '../layout/DashboardLayout';
 import Card from '../components/Card';
 import API from '../api/api';
 import '../styles/leads.css';
 
 export default function Settings() {
+  const alert = useAlert();
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
+  const [confirm, setConfirm] = useState(null);
 
   useEffect(() => {
     Promise.all([API.get('/leads'), API.get('/agents')])
@@ -15,29 +18,40 @@ export default function Settings() {
         setAgents(agentsRes.data);
       })
       .catch(() => {
-        window.alert('Failed to load settings data.');
+        alert.error('Failed to load settings data.');
       });
   }, []);
 
   const handleDeleteLead = async (id) => {
-    if (!window.confirm('Delete this lead?')) return;
     try {
       await API.delete(`/leads/${id}`);
       setLeads(prev => prev.filter(lead => lead._id !== id));
-      window.alert('Lead deleted successfully.');
+      alert.success('Lead deleted successfully.');
     } catch {
-      window.alert('Failed to delete lead.');
+      alert.error('Failed to delete lead.');
     }
   };
 
   const handleDeleteAgent = async (id) => {
-    if (!window.confirm('Delete this sales agent?')) return;
     try {
       await API.delete(`/agents/${id}`);
       setAgents(prev => prev.filter(agent => agent.id !== id));
-      window.alert('Sales agent deleted successfully.');
+      alert.success('Sales agent deleted successfully.');
     } catch {
-      window.alert('Failed to delete sales agent.');
+      alert.error('Failed to delete sales agent.');
+    }
+  };
+
+  const confirmDelete = () => {
+    if (!confirm) return;
+    const { type, id } = confirm;
+    setConfirm(null);
+    if (type === 'lead') {
+      handleDeleteLead(id);
+      return;
+    }
+    if (type === 'agent') {
+      handleDeleteAgent(id);
     }
   };
 
@@ -60,7 +74,7 @@ export default function Settings() {
                 <button
                   type="button"
                   className="btn-danger"
-                  onClick={() => handleDeleteLead(lead._id)}
+                  onClick={() => setConfirm({ type: 'lead', id: lead._id })}
                 >
                   Delete
                 </button>
@@ -81,7 +95,7 @@ export default function Settings() {
                 <button
                   type="button"
                   className="btn-danger"
-                  onClick={() => handleDeleteAgent(agent.id)}
+                  onClick={() => setConfirm({ type: 'agent', id: agent.id })}
                 >
                   Delete
                 </button>
@@ -90,6 +104,35 @@ export default function Settings() {
           </div>
         </Card>
       </div>
+
+      {confirm && (
+        <div className="confirm-overlay" role="dialog" aria-modal="true">
+          <div className="confirm-card">
+            <h3>Confirm Delete</h3>
+            <p>
+              {confirm.type === 'lead'
+                ? 'Delete this lead?'
+                : 'Delete this sales agent?'}
+            </p>
+            <div className="confirm-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setConfirm(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn-danger"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 }

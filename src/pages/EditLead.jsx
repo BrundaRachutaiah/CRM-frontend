@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import { useNavigate, useParams } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import API from '../api/api';
@@ -14,6 +15,7 @@ const initialForm = {
 };
 
 export default function EditLead() {
+  const alert = useAlert();
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
@@ -59,11 +61,11 @@ export default function EditLead() {
         ...form,
         timeToClose: Number(form.timeToClose)
       });
-      window.alert('Lead updated successfully.');
+      alert.success('Lead updated successfully.');
       navigate(`/leads/${id}`);
     } catch (submitError) {
       setError(submitError.response?.data?.message || 'Failed to update lead.');
-      window.alert('Failed to update lead.');
+      alert.error('Failed to update lead.');
     } finally {
       setSaving(false);
     }

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import Card from '../components/Card';
+import PipelinePieChart from '../components/PipelinePieChart';
+import ClosedByAgentBarChart from '../components/ClosedByAgentBarChart';
 import API from '../api/api';
 import '../styles/reports.css';
 
@@ -10,6 +12,7 @@ export default function Reports() {
   const [pipelineCount, setPipelineCount] = useState(0);
   const [closedLastWeek, setClosedLastWeek] = useState([]);
   const [closedByAgent, setClosedByAgent] = useState([]);
+  const totalClosed = closedByAgent.reduce((sum, row) => sum + row.closedLeads, 0);
 
   useEffect(() => {
     Promise.all([
@@ -47,6 +50,7 @@ export default function Reports() {
         <Card title="Pipeline Report">
           <p className="report-subtitle">Total leads currently in pipeline</p>
           <div className="report-metric">{pipelineCount}</div>
+          <PipelinePieChart pipelineCount={pipelineCount} closedCount={totalClosed} />
         </Card>
 
         <Card title="Closed Last 7 Days">
@@ -56,6 +60,7 @@ export default function Reports() {
 
         <Card title="Closed Leads by Agent">
           <p className="report-subtitle">Closed lead count grouped by sales agent</p>
+          <ClosedByAgentBarChart data={closedByAgent} />
           <div className="report-list">
             {closedByAgent.length === 0 && (
               <p className="empty-state">No closed leads found.</p>

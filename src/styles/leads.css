@@ -90,6 +90,42 @@
   margin-left: 0;
 }
 
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 18, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.confirm-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.confirm-card h3 {
+  margin: 0 0 10px;
+}
+
+.confirm-card p {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 @media (max-width: 900px) {
   .lead-row {
     flex-wrap: wrap;

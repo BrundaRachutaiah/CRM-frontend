@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAlert } from '../hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layout/DashboardLayout';
 import API from '../api/api';
@@ -15,6 +16,7 @@ const initialForm = {
 };
 
 export default function AddLead() {
+  const alert = useAlert();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
   const [agents, setAgents] = useState([]);
@@ -58,11 +60,11 @@ export default function AddLead() {
         timeToClose: Number(form.timeToClose),
         tags: form.tags
       });
-      window.alert('Lead created successfully.');
+      alert.success('Lead created successfully.');
       navigate('/leads');
     } catch (submitError) {
       setError(submitError.response?.data?.message || 'Failed to create lead.');
-      window.alert('Failed to create lead.');
+      alert.error('Failed to create lead.');
     } finally {
       setSaving(false);
     }

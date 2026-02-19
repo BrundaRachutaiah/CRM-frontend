@@ -21,6 +21,11 @@
   gap: 10px;
 }
 
+.chart-wrap {
+  height: 260px;
+  margin-top: 12px;
+}
+
 .report-row {
   display: flex;
   justify-content: space-between;

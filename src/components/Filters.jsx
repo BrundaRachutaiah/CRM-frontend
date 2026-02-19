@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import API from '../api/api';
 
 export default function Filters({ onApply }) {
+  const [agents, setAgents] = useState([]);
   const [status, setStatus] = useState('');
   const [agent, setAgent] = useState('');
+
+  useEffect(() => {
+    API.get('/agents')
+      .then(res => setAgents(res.data))
+      .catch(() => setAgents([]));
+  }, []);
 
   const handleApply = () => {
     onApply({
       ...(status ? { status } : {}),
-      ...(agent.trim() ? { salesAgent: agent.trim() } : {})
+      ...(agent ? { salesAgent: agent } : {})
     });
   };
 
@@ -22,11 +30,14 @@ export default function Filters({ onApply }) {
         <option value="Closed">Closed</option>
       </select>
 
-      <input
-        placeholder="Sales Agent"
-        value={agent}
-        onChange={e => setAgent(e.target.value)}
-      />
+      <select value={agent} onChange={e => setAgent(e.target.value)}>
+        <option value="">All Agents</option>
+        {agents.map(item => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ))}
+      </select>
 
       <button type="button" className="btn-primary" onClick={handleApply}>
         Apply Filters
