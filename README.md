@@ -98,12 +98,6 @@ CRM-frontend-main/
 
 ---
 
-## 📸 Screenshots
-
-*Add UI screenshots here (important for portfolio)*
-
----
-
 ## 📬 Contact
 
 [brundadr315@gmail.com](mailto:brundadr315@gmail.com)
